@@ -1,36 +1,24 @@
 const express = require("express");
-
+const adminAuth = require("./middlewares/adminAuth");
+const userAuth = require("./middlewares/userAuth");
 const app = express();
 const port = 7777;
 
 
+app.use("/admin", adminAuth );
 
-app.get("/profile/:id", (req, res ) => {
-    console.log(req.params.id);
-    res.send({
-        name: "Ghazala Shameem",
-        email: "email353example.com"
-    });
-})
 
-app.post("/profile", (req, res) => {
-    res.send({
-        name: "This is post request",
-        email: "postexample.com"})
-})
+app.get("/admin/getAllData", ( req, res, next) => {
+    res.send("all data sent")
+});
 
-app.delete("/profile", (req, res) => {
-    res.send({
-        name: "This is delete request",
-        email: "deleteexample.com"})
+app.get("/user", userAuth, (req, res, next) => {
+    res.send("you got a user details");
 })
 
 
+  
 
-
-app.use("/test", (req, res) => {
-    res.send("<h1>I am heading 1 from a server to test can we send html data also</h1>")
-})
 
 
 
