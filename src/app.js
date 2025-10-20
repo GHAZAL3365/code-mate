@@ -1,28 +1,37 @@
+const connectToDB = require("../connectDB");
 const express = require("express");
-const adminAuth = require("./middlewares/adminAuth");
-const userAuth = require("./middlewares/userAuth");
+const User = require("./user.model.js")
+
+
+require("dotenv").config();
 const app = express();
-const port = 7777;
+const port = 3365;
 
+app.use(express.json())
 
-app.use("/admin", adminAuth );
+app.post("/signup", async (req, res) => {
 
+    const newUser = new User(req.body)
 
-app.get("/admin/getAllData", ( req, res, next) => {
-    res.send("all data sent")
-});
+ try{
+     await  newUser.save();
+  res.status(201).send("User Added Successfully!")
+ }
+ catch(err) {
+    res.status(400).send("error", err.message)
+    console.log("error", err.message)
+ }
+})
 
-app.get("/user", userAuth, (req, res, next) => {
-    res.send("you got a user details");
+//GET - Feed
+
+app.get("/feed", (req, res) => {
+   
 })
 
 
-  
-
-
-
-
-app.listen(port, () => {
-    console.log("server listen port numer " + port);
-
+connectToDB().then(() => {
+ app.listen(port, () => {
+  console.log("server running on port number " + port)
+ })
 })
