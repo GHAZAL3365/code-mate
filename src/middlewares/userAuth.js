@@ -1,5 +1,5 @@
-const jwt = require("jsonwebtoken");
 const User = require("../models/user.model");
+const jwt = require("jsonwebtoken");
 
 const userAuth = async (req, res, next) => {
   try {
@@ -9,7 +9,7 @@ const userAuth = async (req, res, next) => {
     if (!token) {
       throw new Error("Authentication token is missing. Please login again");
     } else {
-      const decodedData = await user.getJWT();
+      const decodedData = await jwt.verify(token, "CodeMate@3365$.1");
 
       const { _id } = decodedData;
 
