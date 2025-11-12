@@ -7,7 +7,7 @@ const cookieParser = require("cookie-parser");
 
 const authRoutes = require("./routes/auth.js");
 const profileRoutes = require("./routes/profile.js");
-const requestRoutes = require("./routes/request.js");
+const requestRoutes = require("./routes/requests.js");
 
 require("dotenv").config();
 const app = express();

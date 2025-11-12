@@ -13,12 +13,12 @@ const userAuth = async (req, res, next) => {
 
       const { _id } = decodedData;
 
-      const user = await User.findById(_id);
+      const loggedInUser = await User.findById(_id);
 
-      if (!user) {
+      if (!loggedInUser) {
         throw new Error("User is not found");
       } else {
-        req.user = user;
+        req.loggedInUser = loggedInUser;
       }
 
       next();

@@ -35,6 +35,18 @@ const validationForSignup = (firstName, email, password, skills, age) => {
     }
 }
 
+
+const validateDataForEditProfile = (req) => {
+  const allowedFieldsForEdit = ["firstName", "lastName", "age", "gender", "about", "skills"];
+
+  const isAllowedToEdit = Object.keys(req.body).every((key) => allowedFieldsForEdit.includes(key) );
+
+  return isAllowedToEdit;
+
+}
+
 module.exports = {
-    validationForSignup
+    validationForSignup,
+    validateDataForEditProfile
+
 }
