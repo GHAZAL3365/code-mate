@@ -7,7 +7,7 @@ const User = require("../models/user.model.js");
 const requestRoutes = express.Router();
 
 requestRoutes.post(
-  "/sendConnectionRequest/:status/:userId",
+  "/request/send/:status/:userId",
   userAuth,
   async (req, res, next) => {
     try {
@@ -17,7 +17,7 @@ requestRoutes.post(
 
       const allowedStatus = ["interested", "ignored"];
 
-      const toUser = await User.findOne(toUserId);
+      const toUser = await User.findById(toUserId);
 
       if (!toUser) {
         return res.status(404).json({
@@ -25,6 +25,13 @@ requestRoutes.post(
         });
       }
 
+      if (!allowedStatus.includes(status)) {
+        return res.status(400).json({
+          message: "Invalid status type" + status,
+        });
+      }
+
+      // preventing duplicate connection requests
       const existingConnectionRequest = await ConnectionRequests.findOne({
         $or: [
           { fromUserId, toUserId },
@@ -35,12 +42,6 @@ requestRoutes.post(
       if (existingConnectionRequest) {
         return res.status(200).json({
           message: "You already sent a connection request",
-        });
-      }
-
-      if (!allowedStatus.includes(status)) {
-        return res.status(400).json({
-          message: "Invalid status type" + status,
         });
       }
 
@@ -68,6 +69,7 @@ requestRoutes.post(
         data: savedRequest,
       });
     } catch (err) {
+      console.log("ERROR!!!!!!", err.message)
       return res.status(400).send("Error  " + err.message);
     }
   }
